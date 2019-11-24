@@ -1,10 +1,55 @@
 <?php
 
 require_once("models/SiteModel.php");
+require_once("models/UsersModel.php");
 $site_OBJ = new SiteModel();
 $site_OBJ->getSiteInfo();
 
 
+if(!isset($_SESSION))
+{
+session_start();
+
+}
+
+if(isset($_POST["loginBtn"]))
+{
+	if (isset($_POST["inputEmail"])  && !empty($_POST["inputEmail"]))
+	{
+		if (isset($_POST["inputPassword"]) && !empty($_POST["inputPassword"]))
+		{
+			$_username = trim($_POST["inputEmail"]);
+			$_password = md5($_POST["inputPassword"]);
+
+
+		
+			$Users_OBJ = new UsersModel();
+			$loginResult = $Users_OBJ->UserLogin($_username,$_password);
+			
+			if ($loginResult != null )
+			{
+				// LOGIN IS CURRECT
+
+			// $_SESSION["User"] = $loginResult;
+			// header ("location: ./_login.php");
+
+			$_SESSION["isUserLogin"] = true;
+			$_SESSION["Username"] = $loginResult["username"];
+		
+			}else{
+				$_SESSION["LoginError"] = "Username or Password is Not Correct!";
+				header ("Location: ./login.php");
+			}
+
+		}
+	}
+}
+else if(isset($_POST["logoutBtn"]))
+{
+	$_SESSION["isUserLogin"] = false;
+	$current_url = $_SERVER[REQUEST_URI];
+	header("location: $current_url");
+}
 
 ?>
 
@@ -48,8 +93,15 @@ $site_OBJ->getSiteInfo();
 					<a href="#"><span class="icon-tumblr"></span></a>
 				</div>
 				<a class="active" href="index.html"> <span class="icon-home"></span> Home</a> 
+				<?php  
+				if(isset($_SESSION["isUserLogin"]) && $_SESSION["isUserLogin"])	
+				{ ?>
 				<a href="#"><span class="icon-user"></span> My Account</a> 
-				<a href="register.html"><span class="icon-edit"></span> Free Register </a> 
+				<?php }
+				else {
+				 ?>
+				<a href="register.php"><span class="icon-edit"></span> Free Register </a> 
+				<?php } ?>
 				<a href="contact.html"><span class="icon-envelope"></span> Contact us</a>
 				<a href="cart.html"><span class="icon-shopping-cart"></span> 2 Item(s) - <span class="badge badge-warning"> $448.42</span></a>
 			</div>
@@ -66,7 +118,7 @@ Lower Header Section
 <div class="row">
 	<div class="span4">
 	<h1>
-	<a class="logo" href="index.html"><span>Twitter Bootstrap ecommerce template</span> 
+	<a class="logo" href="index.php"><span>Twitter Bootstrap ecommerce template</span> 
 		<img src="<?php echo $site_OBJ->siteURL."/assets/images/".$site_OBJ->Logo; ?>" alt="bootstrap sexy shop">
 	</a>
 	</h1>
@@ -134,30 +186,51 @@ Navigation Bar Section
 			  <li class=""><a href="four-col.html">Four Column</a></li>
 			  <li class=""><a href="general.html">General Content</a></li> -->
 			</ul>
-			<form action="#" class="navbar-search pull-left">
-			  <input type="text" placeholder="Search" class="search-query span2">
-			</form>
+			
+			<?php 
+			if (isset($_SESSION["isUserLogin"]) && !$_SESSION["isUserLogin"])
+			{ ?>
 			<ul class="nav pull-right">
 			<li class="dropdown">
 				<a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-lock"></span> Login <b class="caret"></b></a>
 				<div class="dropdown-menu">
-				<form class="form-horizontal loginFrm">
+				<form class="form-horizontal loginFrm" action="" method="POST">
 				  <div class="control-group">
-					<input type="text" class="span2" id="inputEmail" placeholder="Email">
+					<input type="text" class="span2" name="inputEmail" id="inputEmail" placeholder="Email">
 				  </div>
 				  <div class="control-group">
-					<input type="password" class="span2" id="inputPassword" placeholder="Password">
+					<input type="password" class="span2" name="inputPassword" id="inputPassword" placeholder="Password">
 				  </div>
 				  <div class="control-group">
 					<label class="checkbox">
 					<input type="checkbox"> Remember me
 					</label>
-					<button type="submit" class="shopBtn btn-block">Sign in</button>
+					<button type="submit" name="loginBtn" id="loginBtn" class="shopBtn btn-block">Sign in</button>
 				  </div>
 				</form>
 				</div>
 			</li>
 			</ul>
+			<?php }
+			else 
+			{
+				?>
+				<ul class="nav pull-right">
+					<li>
+					
+				<form class="form-horizontal loginFrm" style="margin-top: 4px; margin-bottom: 4px;" action="" method="POST">
+				<button type="submit" name="logoutBtn" id="logoutBtn" class="shopBtn btn-block" style="margin-top: 5pxl;">Logout</button>
+			
+			</form>	
+			</li>
+				</ul>
+				<?php
+			}
+			?>
+
+<form action="#" class="navbar-search pull-right">
+			  <input type="text" placeholder="Search" class="search-query span2" style="margin-right: 5px;">
+			</form>
 		  </div>
 		</div>
 	  </div>

@@ -31,6 +31,11 @@ public $conn;
 
 
 
+
+
 }
+
+$var = new DB();
+
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-require("DB.php");
+require_once("DB.php");
 
 class SiteModel{
 
@@ -50,7 +50,7 @@ class SiteModel{
 
     public function getSiteMenus()
     {
-        $var = $this->db_conn->query("SELECT * FROM tbl_System_Menus");
+        $var = $this->db_conn->query("SELECT * FROM tbl_System_Menus WHERE status = 1");
         $result = $var->fetchAll();
         
        return $result;
