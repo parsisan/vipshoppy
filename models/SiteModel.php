@@ -66,12 +66,6 @@ class SiteModel{
 }
 
 
-
-
-$var = new SiteModel();
-$var->getSiteInfo();
-
-
 ?>
 
 

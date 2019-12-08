@@ -27,8 +27,15 @@ class UsersModel{
 
     public function UserRegister($username, $password)
     {
+        try{
         $result = $this->db_conn->query("INSERT INTO tbl_users (tbl_users.username,tbl_users.password,tbl_users.status) VALUES ('$username','$password',1)");
+        
         return $result;
+        }
+        catch(PDOException $e)
+        {
+            return false;
+        }
 
     }
 

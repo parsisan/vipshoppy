@@ -17,8 +17,18 @@ if(isset($_POST["RegisterBtn"]))
 			$RegisterResult = $Users_OBJ->UserRegister($_username,$_password);
 			if ($RegisterResult)
 			{
+				ob_start();
 				header ("Location: ./login.php");
+				ob_end_flush();
+				die();
 			}
+			else
+			{
+				$_SESSION["RegisterError"] = "Username is already exist!";
+
+			}
+
+
 		}
 	}
 }
@@ -53,6 +63,16 @@ include_once("./sidebar.php");
 	<div class="well">
 	<form class="form-horizontal" action="" method="POST">
 		<h3>Your Personal Details</h3>
+
+		<?php
+		if (isset($_SESSION["RegisterError"]))
+		{
+			echo "<span style='color: red;'><b>".$_SESSION["RegisterError"]."</b></span>";
+			unset($_SESSION["RegisterError"]);
+		}
+
+		?>
+
 		<!-- <div class="control-group">
 		<label class="control-label">Title <sup>*</sup></label>
 		<div class="controls">

@@ -38,7 +38,10 @@ if(isset($_POST["loginBtn"]))
 		
 			}else{
 				$_SESSION["LoginError"] = "Username or Password is Not Correct!";
+				ob_start();
 				header ("Location: ./login.php");
+				ob_end_flush();
+				die();
 			}
 
 		}
@@ -47,8 +50,15 @@ if(isset($_POST["loginBtn"]))
 else if(isset($_POST["logoutBtn"]))
 {
 	$_SESSION["isUserLogin"] = false;
-	$current_url = $_SERVER[REQUEST_URI];
+	$current_url = $_SERVER['REQUEST_URI'];
+
+	ob_start();
 	header("location: $current_url");
+    ob_end_flush();
+    die();
+
+
+
 }
 
 ?>
@@ -62,11 +72,11 @@ else if(isset($_POST["logoutBtn"]))
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Bootstrap styles -->
-    <link href="assets/css/bootstrap.css" rel="stylesheet"/>
+    <link href="<?php echo $site_OBJ->siteURL; ?>/assets/css/bootstrap.css" rel="stylesheet"/>
     <!-- Customize styles -->
-    <link href="style.css" rel="stylesheet"/>
+    <link href="<?php echo $site_OBJ->siteURL; ?>/style.css" rel="stylesheet"/>
     <!-- font awesome styles -->
-	<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+	<link href="<?php echo $site_OBJ->siteURL; ?>/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
 		<!--[if IE 7]>
 			<link href="css/font-awesome-ie7.min.css" rel="stylesheet">
 		<![endif]-->
@@ -76,7 +86,7 @@ else if(isset($_POST["logoutBtn"]))
 		<![endif]-->
 
 	<!-- Favicons -->
-    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="shortcut icon" href="<?php echo $site_OBJ->siteURL; ?>/assets/ico/favicon.ico">
   </head>
 <body>
 <!-- 
@@ -118,7 +128,7 @@ Lower Header Section
 <div class="row">
 	<div class="span4">
 	<h1>
-	<a class="logo" href="index.php"><span>Twitter Bootstrap ecommerce template</span> 
+	<a class="logo" href="<?php echo $site_OBJ->siteURL; ?>"><span>Twitter Bootstrap ecommerce template</span> 
 		<img src="<?php echo $site_OBJ->siteURL."/assets/images/".$site_OBJ->Logo; ?>" alt="bootstrap sexy shop">
 	</a>
 	</h1>
@@ -188,7 +198,7 @@ Navigation Bar Section
 			</ul>
 			
 			<?php 
-			if (isset($_SESSION["isUserLogin"]) && !$_SESSION["isUserLogin"])
+			if (!isset($_SESSION["isUserLogin"]))
 			{ ?>
 			<ul class="nav pull-right">
 			<li class="dropdown">
@@ -228,8 +238,8 @@ Navigation Bar Section
 			}
 			?>
 
-<form action="#" class="navbar-search pull-right">
-			  <input type="text" placeholder="Search" class="search-query span2" style="margin-right: 5px;">
+<form action="<?php echo $site_OBJ->siteURL; ?>/products/search.php" method="GET" class="navbar-search pull-right">
+			  <input type="text" placeholder="Search" class="search-query span2" style="margin-right: 5px;" name="q" id="q">
 			</form>
 		  </div>
 		</div>

@@ -1,9 +1,7 @@
 <?php
 
-require_once("./models/DB.php");
-
-$var = new DB();
-
+echo "<pre>";
+print_r($_SERVER);
 
 
 ?>
