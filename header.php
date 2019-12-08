@@ -5,6 +5,13 @@ require_once("models/UsersModel.php");
 $site_OBJ = new SiteModel();
 $site_OBJ->getSiteInfo();
 
+// 
+$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."<br>";
+if (strstr($actual_link,"index")) {
+	$site_title = "فروشگاه من";
+}elseif (strstr($actual_link,"register")) {
+	$site_title = "ثبت نام";
+}
 
 if(!isset($_SESSION))
 {
@@ -67,7 +74,7 @@ else if(isset($_POST["logoutBtn"]))
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title><?php echo $site_OBJ->siteTitle; ?></title>
+    <title><?php echo $site_title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -104,7 +111,7 @@ else if(isset($_POST["logoutBtn"]))
 				</div>
 				<a class="active" href="index.html"> <span class="icon-home"></span> Home</a> 
 				<?php  
-				if(isset($_SESSION["isUserLogin"]) && $_SESSION["isUserLogin"])	
+				if(isset($_SESSION["isUserLogin"] ))	
 				{ ?>
 				<a href="#"><span class="icon-user"></span> My Account</a> 
 				<?php }
