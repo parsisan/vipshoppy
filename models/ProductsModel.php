@@ -98,7 +98,7 @@ LIMIT $count
 
 
     
-    public function GetProducts($cat_id,$subcat_id,$count)
+    public function GetProductsByCat($cat_id,$subcat_id,$count)
     {
         $_WHERE_SUBCAT = "";
         if ($subcat_id != 0)
@@ -157,7 +157,55 @@ LIMIT $count
         
     }
 
+    public function GetProductByID($product_id)
+    {
+    
+        $var = $this->db_conn->query("
+        SELECT
+        tbl_product_categories.title AS 'CAT_TITLE', 
+        tbl_product_categories.id AS 'CAT_ID',
+        tbl_product_subcategories.title AS 'SUBCAT_TITLE', 
+        tbl_product_subcategories.id AS 'SUBCAT_ID', 
+        tbl_products.title AS 'PRODUCT_TITLE', 
+        tbl_products.price, 
+        tbl_products.qntty, 
+        tbl_products.description, 
+        tbl_products.mainpic
+    FROM
+        tbl_product_categories
+        INNER JOIN
+        tbl_product_subcategories
+        ON 
+            tbl_product_categories.id = tbl_product_subcategories.cat_id
+        INNER JOIN
+        tbl_products
+        ON 
+            tbl_products.subcat_id = tbl_product_subcategories.id
+    
+    WHERE tbl_products.id = $product_id
+    AND
+    tbl_products.`status` > 0 AND tbl_products.`status` IS NOT NULL
+ 
+        ");
 
+        $result = $var->fetch();
+        return $result;
+        
+    }
+    public function GetProductGallery($product_id)
+    {
+    
+        $var = $this->db_conn->query("
+        SELECT tbl_products_gallery.pic
+        FROM tbl_products_gallery
+        WHERE tbl_products_gallery.product_id = $product_id
+ 
+        ");
+
+        $result = $var->fetchAll();
+        return $result;
+        
+    }
 
 
 }

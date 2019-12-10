@@ -35,7 +35,7 @@ if (isset($_GET["q"])){
 	$Product_OBJ = new ProductsModel();
 	$searchResult = $Product_OBJ->Search($_temp , 10);
 
-	$picFolder = $site_OBJ->siteURL."/public/products/images/";
+	$picFolder = $site_OBJ->siteURL."/public/images/products/";
 
 	if(count($searchResult)==0 || $searchResult == null )
 	{
