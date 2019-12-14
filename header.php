@@ -1,11 +1,13 @@
 <?php
 
+
 require_once("models/SiteModel.php");
 require_once("models/UsersModel.php");
 $site_OBJ = new SiteModel();
 $site_OBJ->getSiteInfo();
 
-// 
+// >>>>saeed
+
 $actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."<br>";
 if (strstr($actual_link,"index")) {
 	$site_title = "فروشگاه من";
@@ -13,10 +15,10 @@ if (strstr($actual_link,"index")) {
 	$site_title = "ثبت نام";
 }
 
+// >>>>master
 if(!isset($_SESSION))
 {
-session_start();
-
+	session_start();
 }
 
 if(isset($_POST["loginBtn"]))
@@ -56,7 +58,11 @@ if(isset($_POST["loginBtn"]))
 }
 else if(isset($_POST["logoutBtn"]))
 {
+	session_destroy();
+
+	
 	$_SESSION["isUserLogin"] = false;
+	
 	$current_url = $_SERVER['REQUEST_URI'];
 
 	ob_start();
@@ -67,6 +73,8 @@ else if(isset($_POST["logoutBtn"]))
 
 
 }
+
+
 
 ?>
 
@@ -205,8 +213,12 @@ Navigation Bar Section
 			</ul>
 			
 			<?php 
-			if (!isset($_SESSION["isUserLogin"]))
-			{ ?>
+			if (isset($_SESSION["isUserLogin"]))
+			{
+			if ($_SESSION["isUserLogin"] == false)
+			{ 
+				
+				?>
 			<ul class="nav pull-right">
 			<li class="dropdown">
 				<a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-lock"></span> Login <b class="caret"></b></a>
@@ -231,6 +243,7 @@ Navigation Bar Section
 			<?php }
 			else 
 			{
+				
 				?>
 				<ul class="nav pull-right">
 					<li>
@@ -242,7 +255,35 @@ Navigation Bar Section
 			</li>
 				</ul>
 				<?php
-			}
+			
+		}
+	}
+	else{
+		?>
+<ul class="nav pull-right">
+			<li class="dropdown">
+				<a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-lock"></span> Login <b class="caret"></b></a>
+				<div class="dropdown-menu">
+				<form class="form-horizontal loginFrm" action="" method="POST">
+				  <div class="control-group">
+					<input type="text" class="span2" name="inputEmail" id="inputEmail" placeholder="Email">
+				  </div>
+				  <div class="control-group">
+					<input type="password" class="span2" name="inputPassword" id="inputPassword" placeholder="Password">
+				  </div>
+				  <div class="control-group">
+					<label class="checkbox">
+					<input type="checkbox"> Remember me
+					</label>
+					<button type="submit" name="loginBtn" id="loginBtn" class="shopBtn btn-block">Sign in</button>
+				  </div>
+				</form>
+				</div>
+			</li>
+			</ul>
+
+		<?php
+	}
 			?>
 
 <form action="<?php echo $site_OBJ->siteURL; ?>/products/search.php" method="GET" class="navbar-search pull-right">
